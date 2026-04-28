@@ -5,7 +5,7 @@ import { Link } from '../../lib/navigation'
 import { client } from '../../sanity/lib/client'
 import { homepageQuery } from '../../lib/sanity/queries'
 import { urlFor } from '../../sanity/lib/image'
-import { HERO_IMAGES } from '../../lib/heroImages'
+import { HERO_IMAGES, ABOUT_GRID_IMAGES, HOME_TEAM_IMAGES } from '../../lib/heroImages'
 
 interface Props {
   params: Promise<{ lang: string }>
@@ -111,31 +111,24 @@ export default async function HomePage({ params }: Props) {
             {/* Image grid 2×2 */}
             <div className="grid grid-cols-2 gap-3">
               {[
-                { emoji: '🌾', label: lang === 'tr' ? 'Tedarik' : 'Procurement' },
-                { emoji: '⚙️', label: lang === 'tr' ? 'İşleme' : 'Processing' },
-                { emoji: '🏭', label: lang === 'tr' ? 'Depolama' : 'Storage' },
-                { emoji: '🚢', label: lang === 'tr' ? 'Sevkiyat' : 'Shipping' },
-              ].map(({ emoji, label }) =>
-                data?.aboutImage ? (
-                  <div key={label} className="relative h-44 rounded-xl overflow-hidden">
-                    <Image
-                      src={urlFor(data.aboutImage).width(400).height(300).url()}
-                      alt={label}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div
-                    key={label}
-                    className="h-44 rounded-xl flex flex-col items-center justify-center gap-2"
-                    style={{ backgroundColor: '#e8e2d5' }}
-                  >
-                    <span className="text-4xl">{emoji}</span>
-                    <span className="text-xs font-semibold text-gray-500">{label}</span>
-                  </div>
-                )
-              )}
+                lang === 'tr' ? 'Tedarik' : 'Procurement',
+                lang === 'tr' ? 'İşleme' : 'Processing',
+                lang === 'tr' ? 'Depolama' : 'Storage',
+                lang === 'tr' ? 'Sevkiyat' : 'Shipping',
+              ].map((label, i) => (
+                <div key={label} className="relative h-44 rounded-xl overflow-hidden">
+                  <Image
+                    src={
+                      data?.aboutImage
+                        ? urlFor(data.aboutImage).width(400).height(300).url()
+                        : ABOUT_GRID_IMAGES[i]
+                    }
+                    alt={label}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -275,15 +268,11 @@ export default async function HomePage({ params }: Props) {
                 {t('home.meetTeam')} →
               </Link>
             </div>
-            {/* Team portrait placeholders */}
+            {/* Team portrait grid */}
             <div className="grid grid-cols-3 gap-3">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl aspect-square flex items-center justify-center"
-                  style={{ backgroundColor: '#e8e2d5' }}
-                >
-                  <span className="text-3xl">👤</span>
+              {HOME_TEAM_IMAGES.map((src, i) => (
+                <div key={i} className="relative rounded-xl aspect-square overflow-hidden">
+                  <Image src={src} alt={`Team member ${i + 1}`} fill className="object-cover" />
                 </div>
               ))}
             </div>

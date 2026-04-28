@@ -6,6 +6,7 @@ import { client } from '../../../sanity/lib/client'
 import { activitiesQuery } from '../../../lib/sanity/queries'
 import type { SanityImageSource } from '@sanity/image-url'
 import { urlFor } from '../../../sanity/lib/image'
+import { ACTIVITY_IMAGES_LIST } from '../../../lib/heroImages'
 import type { Metadata } from 'next'
 
 const NAVY = '#1a2a4a'
@@ -161,22 +162,16 @@ export default async function ActivitiesPage({ params }: Props) {
                   {/* Image side */}
                   <div className={`relative h-72 lg:h-[420px] rounded-2xl overflow-hidden ${isEven ? '' : 'lg:order-1'}`}
                     style={{ backgroundColor: '#d9d3c7' }}>
-                    {item.image ? (
-                      <Image
-                        src={urlFor(item.image).width(800).height(600).url()}
-                        alt={item.title}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                        style={{ backgroundColor: '#d0cab8' }}>
-                        <span className="text-7xl">{fallback?.icon ?? '🏭'}</span>
-                        <span className="text-sm font-semibold text-gray-500">
-                          {item.title.replace(/^\d+\.\s*/, '')}
-                        </span>
-                      </div>
-                    )}
+                    <Image
+                      src={
+                        item.image
+                          ? urlFor(item.image).width(800).height(600).url()
+                          : ACTIVITY_IMAGES_LIST[Math.min(idx, ACTIVITY_IMAGES_LIST.length - 1)]
+                      }
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -235,10 +230,13 @@ export default async function ActivitiesPage({ params }: Props) {
                       </div>
                     )}
                   </div>
-                  <div className={`h-72 lg:h-[420px] rounded-2xl flex flex-col items-center justify-center gap-3 ${isEven ? '' : 'lg:order-1'}`}
-                    style={{ backgroundColor: '#d0cab8' }}>
-                    <span className="text-7xl">{fb.icon}</span>
-                    <span className="text-sm font-semibold text-gray-500">{t(`activities.${fb.slug}`)}</span>
+                  <div className={`relative h-72 lg:h-[420px] rounded-2xl overflow-hidden ${isEven ? '' : 'lg:order-1'}`}>
+                    <Image
+                      src={ACTIVITY_IMAGES_LIST[Math.min(idx, ACTIVITY_IMAGES_LIST.length - 1)]}
+                      alt={t(`activities.${fb.slug}`)}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 </div>
               </div>

@@ -6,6 +6,7 @@ import { client } from '../../../sanity/lib/client'
 import { companyQuery } from '../../../lib/sanity/queries'
 import type { SanityImageSource } from '@sanity/image-url'
 import { urlFor } from '../../../sanity/lib/image'
+import { COMPANY_STORY_IMAGE } from '../../../lib/heroImages'
 import type { Metadata } from 'next'
 
 const NAVY = '#1a2a4a'
@@ -107,18 +108,16 @@ export default async function CompanyPage({ params }: Props) {
               className="relative h-80 lg:h-[420px] rounded-2xl overflow-hidden"
               style={{ backgroundColor: '#d0cab8' }}
             >
-              {data?.heroImage ? (
-                <Image
-                  src={urlFor(data.heroImage).width(800).height(600).url()}
-                  alt={t('company.ourStory')}
-                  fill
-                  className="object-cover"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-7xl">🏢</span>
-                </div>
-              )}
+              <Image
+                src={
+                  data?.heroImage
+                    ? urlFor(data.heroImage).width(800).height(600).url()
+                    : COMPANY_STORY_IMAGE
+                }
+                alt={t('company.ourStory')}
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
         </div>

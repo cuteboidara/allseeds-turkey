@@ -7,6 +7,7 @@ import { client } from '../../../sanity/lib/client'
 import { peopleQuery } from '../../../lib/sanity/queries'
 import type { SanityImageSource } from '@sanity/image-url'
 import { urlFor } from '../../../sanity/lib/image'
+import { PORTRAIT_IMAGES } from '../../../lib/heroImages'
 import type { Metadata } from 'next'
 
 const NAVY = '#1a2a4a'
@@ -96,16 +97,12 @@ export default async function PeoplePage({ params }: Props) {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div
-                          className="w-20 h-20 rounded-full flex items-center justify-center"
-                          style={{ backgroundColor: '#b8b0a0' }}
-                        >
-                          <span className="text-2xl font-bold text-white">
-                            {member.name.charAt(0)}
-                          </span>
-                        </div>
-                      </div>
+                      <Image
+                        src={PORTRAIT_IMAGES[i % PORTRAIT_IMAGES.length]}
+                        alt={member.name}
+                        fill
+                        className="object-cover"
+                      />
                     )}
                   </div>
                   <div className="p-6">
@@ -131,14 +128,9 @@ export default async function PeoplePage({ params }: Props) {
           ) : (
             /* Placeholder grid when no Sanity data */
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="rounded-2xl aspect-square flex flex-col items-center justify-center gap-2"
-                  style={{ backgroundColor: '#e8e2d5' }}
-                >
-                  <span className="text-4xl">👤</span>
-                  <span className="text-xs font-semibold text-gray-400">Team Member</span>
+              {PORTRAIT_IMAGES.map((src, i) => (
+                <div key={i} className="relative rounded-2xl aspect-square overflow-hidden">
+                  <Image src={src} alt={`Team member ${i + 1}`} fill className="object-cover" />
                 </div>
               ))}
             </div>

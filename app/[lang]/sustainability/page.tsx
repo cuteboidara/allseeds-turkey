@@ -6,6 +6,7 @@ import { client } from '../../../sanity/lib/client'
 import { sustainabilityQuery } from '../../../lib/sanity/queries'
 import type { SanityImageSource } from '@sanity/image-url'
 import { urlFor } from '../../../sanity/lib/image'
+import { SUSTAINABILITY_IMAGES_LIST } from '../../../lib/heroImages'
 import type { Metadata } from 'next'
 
 const NAVY = '#1a2a4a'
@@ -150,21 +151,16 @@ export default async function SustainabilityPage({ params }: Props) {
                     className={`relative h-72 lg:h-[420px] rounded-2xl overflow-hidden ${isEven ? '' : 'lg:order-1'}`}
                     style={{ backgroundColor: '#d9d3c7' }}
                   >
-                    {pillar.image ? (
-                      <Image
-                        src={urlFor(pillar.image).width(800).height(600).url()}
-                        alt={pillar.title}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-3"
-                        style={{ backgroundColor: '#d0cab8' }}
-                      >
-                        <span className="text-7xl">{fallback?.icon ?? '🌿'}</span>
-                      </div>
-                    )}
+                    <Image
+                      src={
+                        pillar.image
+                          ? urlFor(pillar.image).width(800).height(600).url()
+                          : SUSTAINABILITY_IMAGES_LIST[Math.min(idx, SUSTAINABILITY_IMAGES_LIST.length - 1)]
+                      }
+                      alt={pillar.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -207,11 +203,13 @@ export default async function SustainabilityPage({ params }: Props) {
                       ))}
                     </ul>
                   </div>
-                  <div
-                    className={`h-72 lg:h-[420px] rounded-2xl flex flex-col items-center justify-center gap-3 ${isEven ? '' : 'lg:order-1'}`}
-                    style={{ backgroundColor: '#d0cab8' }}
-                  >
-                    <span className="text-7xl">{fb.icon}</span>
+                  <div className={`relative h-72 lg:h-[420px] rounded-2xl overflow-hidden ${isEven ? '' : 'lg:order-1'}`}>
+                    <Image
+                      src={SUSTAINABILITY_IMAGES_LIST[Math.min(idx, SUSTAINABILITY_IMAGES_LIST.length - 1)]}
+                      alt={t(`sustainability.${fb.key}`)}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 </div>
               </div>
