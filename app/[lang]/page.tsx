@@ -5,6 +5,7 @@ import { Link } from '../../lib/navigation'
 import { client } from '../../sanity/lib/client'
 import { homepageQuery } from '../../lib/sanity/queries'
 import { urlFor } from '../../sanity/lib/image'
+import { HERO_IMAGES } from '../../lib/heroImages'
 
 interface Props {
   params: Promise<{ lang: string }>
@@ -51,15 +52,17 @@ export default async function HomePage({ params }: Props) {
         className="relative flex items-end justify-start min-h-[92vh] overflow-hidden"
         style={{ backgroundColor: NAVY }}
       >
-        {data?.heroImage && (
-          <Image
-            src={urlFor(data.heroImage).width(1920).height(1080).url()}
-            alt={data.heroTitle || 'Allseeds Turkey'}
-            fill
-            className="object-cover"
-            priority
-          />
-        )}
+        <Image
+          src={
+            data?.heroImage
+              ? urlFor(data.heroImage).width(1920).height(1080).url()
+              : HERO_IMAGES.home
+          }
+          alt={data?.heroTitle || 'Allseeds Turkey'}
+          fill
+          className="object-cover"
+          priority
+        />
         {/* dark gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
