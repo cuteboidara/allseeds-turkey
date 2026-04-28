@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "Ana Sayfa",
+    "activities": "Faaliyetler",
+    "sustainability": "Sürdürülebilirlik",
+    "people": "Ekibimiz",
+    "company": "Şirket",
+    "contact": "İletişim"
+  },
+  "home": {
+    "heroTitle": "Küresel Tarımsal Ticaret",
+    "heroSubtitle": "Piyasaları birleştiriyor, dünya genelinde kaliteli tohum ve tahıl sunuyoruz.",
+    "aboutTitle": "Allseeds Turkey Hakkında",
+    "aboutText": "Allseeds Turkey, yağlı tohumlar ve tahılların tedariki, işlenmesi, depolanması ve ticaretinde uzmanlaşmış önde gelen bir tarımsal emtia ticaret şirketidir.",
+    "learnMore": "Daha Fazla",
+    "ourActivities": "Faaliyetlerimiz",
+    "viewAll": "Tümünü Gör"
+  },
+  "activities": {
+    "pageTitle": "Faaliyetlerimiz",
+    "pageSubtitle": "Tedarikten teslimata — tedarik zincirinin her adımını biz yönetiyoruz.",
+    "procurement": "Tedarik",
+    "procurementDesc": "Dünya genelindeki güvenilir üreticilerden en kaliteli tarımsal emtia tedariki.",
+    "processing": "İşleme",
+    "processingDesc": "En yüksek ürün kalitesini sağlayan son teknoloji işleme tesisleri.",
+    "storage": "Depolama",
+    "storageDesc": "Tüm emtialar için optimum koşulları koruyan modern depolama altyapısı.",
+    "trading": "Ticaret",
+    "tradingDesc": "Küresel tarımsal emtia piyasalarında alıcı ve satıcıları buluşturuyoruz."
+  },
+  "sustainability": {
+    "pageTitle": "Sürdürülebilirlik",
+    "pageSubtitle": "Tarım ve topluluklar için daha iyi bir gelecek taahhüdümüz.",
+    "environmental": "Çevre",
+    "environmentalDesc": "Sorumlu uygulamalar aracılığıyla çevresel ayak izimizi en aza indiriyoruz.",
+    "quality": "Kalite",
+    "qualityDesc": "En yüksek ürün kalitesi ve gıda güvenliği standartlarını koruyoruz.",
+    "social": "Sosyal",
+    "socialDesc": "Toplulukları destekliyor ve adil ticaret ilişkilerini teşvik ediyoruz."
+  },
+  "people": {
+    "pageTitle": "Ekibimiz",
+    "pageSubtitle": "Allseeds Turkey'i ileriye taşıyan deneyimli ekip.",
+    "meetTeam": "Ekibimizle Tanışın"
+  },
+  "company": {
+    "pageTitle": "Şirket",
+    "pageSubtitle": "Allseeds Turkey'nin tarihi, değerleri ve küresel varlığı hakkında daha fazla bilgi edinin.",
+    "ourStory": "Hikayemiz",
+    "locations": "Ofislerimiz",
+    "keyFigures": "Temel Rakamlar"
+  },
+  "contact": {
+    "pageTitle": "Bize Ulaşın",
+    "pageSubtitle": "Ekibimizle iletişime geçin.",
+    "name": "Ad Soyad",
+    "email": "E-posta",
+    "phone": "Telefon",
+    "message": "Mesaj",
+    "subject": "Konu",
+    "send": "Mesaj Gönder",
+    "sending": "Gönderiliyor...",
+    "success": "Mesajınız başarıyla gönderildi!",
+    "error": "Bir şeyler ters gitti. Lütfen tekrar deneyin.",
+    "offices": "Ofislerimiz"
+  },
+  "footer": {
+    "tagline": "Küresel Tarımsal Ticaret",
+    "rights": "Tüm hakları saklıdır.",
+    "company": "Şirket",
+    "quickLinks": "Hızlı Bağlantılar"
+  },
+  "common": {
+    "readMore": "Devamını Oku",
+    "backToTop": "Yukarı Dön",
+    "loading": "Yükleniyor..."
+  }
+}

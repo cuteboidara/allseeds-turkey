@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls C:/Users/daram/allseeds-turkey/.env*)",
+      "Bash(xargs grep:*)",
+      "Bash(grep -r \"middleware-to-proxy\\\\|proxy.*convention\\\\|proxy\" C:/Users/daram/allseeds-turkey/node_modules/next/dist/ --include=*.js -l)",
+      "Bash(grep -r \"createMiddleware\\\\|createProxy\" C:/Users/daram/allseeds-turkey/node_modules/next-intl/dist/ --include=*.js -l)",
+      "Bash(npx tsc:*)",
+      "Bash(find C:/Users/daram/allseeds-turkey/node_modules/@sanity/image-url -name *.d.ts)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/en/activities)",
+      "Bash(curl -s http://localhost:3000/ -L -w \"\\\\nFinal status: %{http_code}\\\\nFinal URL: %{url_effective}\\\\n\" -o /dev/null)",
+      "Bash(powershell -Command \"try { $r = Invoke-WebRequest -Uri 'http://localhost:3000/en' -MaximumRedirection 5 -UseBasicParsing; Write-Host $r.StatusCode } catch { Write-Host $_.Exception.Message }\" 2>&1)",
+      "Bash(curl -s \"http://localhost:3000/en\" -o /tmp/en_page.html -w \"%{http_code}\" --max-redirs 5)",
+      "Read(//tmp/**)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(npm run:*)",
+      "Bash(taskkill /PID 12668 /F)",
+      "Bash(taskkill //PID 12668 //F)",
+      "Bash(taskkill //IM node.exe //F)"
+    ]
+  }
+}

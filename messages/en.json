@@ -1,0 +1,78 @@
+{
+  "nav": {
+    "home": "Home",
+    "activities": "Activities",
+    "sustainability": "Sustainability",
+    "people": "People",
+    "company": "Company",
+    "contact": "Contact"
+  },
+  "home": {
+    "heroTitle": "Global Agricultural Trading",
+    "heroSubtitle": "Connecting markets, delivering quality seeds and grains across the world.",
+    "aboutTitle": "About Allseeds Turkey",
+    "aboutText": "Allseeds Turkey is a leading agricultural commodity trading company, specializing in the procurement, processing, storage, and trading of oilseeds and grains.",
+    "learnMore": "Learn More",
+    "ourActivities": "Our Activities",
+    "viewAll": "View All"
+  },
+  "activities": {
+    "pageTitle": "Our Activities",
+    "pageSubtitle": "From procurement to delivery — we handle every step of the supply chain.",
+    "procurement": "Procurement",
+    "procurementDesc": "Sourcing the finest agricultural commodities from trusted producers worldwide.",
+    "processing": "Processing",
+    "processingDesc": "State-of-the-art processing facilities ensuring the highest product quality.",
+    "storage": "Storage",
+    "storageDesc": "Modern storage infrastructure maintaining optimal conditions for all commodities.",
+    "trading": "Trading",
+    "tradingDesc": "Connecting buyers and sellers in global agricultural commodity markets."
+  },
+  "sustainability": {
+    "pageTitle": "Sustainability",
+    "pageSubtitle": "Our commitment to a better future for agriculture and communities.",
+    "environmental": "Environmental",
+    "environmentalDesc": "Minimizing our environmental footprint through responsible practices.",
+    "quality": "Quality",
+    "qualityDesc": "Maintaining the highest standards of product quality and food safety.",
+    "social": "Social",
+    "socialDesc": "Supporting communities and fostering fair trade relationships."
+  },
+  "people": {
+    "pageTitle": "Our People",
+    "pageSubtitle": "The experienced team driving Allseeds Turkey forward.",
+    "meetTeam": "Meet Our Team"
+  },
+  "company": {
+    "pageTitle": "Company",
+    "pageSubtitle": "Learn more about Allseeds Turkey's history, values, and global presence.",
+    "ourStory": "Our Story",
+    "locations": "Our Locations",
+    "keyFigures": "Key Figures"
+  },
+  "contact": {
+    "pageTitle": "Contact Us",
+    "pageSubtitle": "Get in touch with our team.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "subject": "Subject",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Message sent successfully!",
+    "error": "Something went wrong. Please try again.",
+    "offices": "Our Offices"
+  },
+  "footer": {
+    "tagline": "Global Agricultural Trading",
+    "rights": "All rights reserved.",
+    "company": "Company",
+    "quickLinks": "Quick Links"
+  },
+  "common": {
+    "readMore": "Read More",
+    "backToTop": "Back to Top",
+    "loading": "Loading..."
+  }
+}
