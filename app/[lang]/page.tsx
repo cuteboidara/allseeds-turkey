@@ -4,13 +4,7 @@ import Image from 'next/image'
 import { Link } from '../../lib/navigation'
 import { client } from '../../sanity/lib/client'
 import { homepageQuery } from '../../lib/sanity/queries'
-import imageUrlBuilder from '@sanity/image-url'
-import type { SanityImageSource } from '@sanity/image-url'
-
-const builder = imageUrlBuilder(client)
-function urlFor(source: SanityImageSource) {
-  return builder.image(source)
-}
+import { urlFor } from '../../sanity/lib/image'
 
 interface Props {
   params: Promise<{ lang: string }>

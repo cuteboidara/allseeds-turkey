@@ -18,7 +18,26 @@
       "Bash(npm run:*)",
       "Bash(taskkill /PID 12668 /F)",
       "Bash(taskkill //PID 12668 //F)",
-      "Bash(taskkill //IM node.exe //F)"
+      "Bash(taskkill //IM node.exe //F)",
+      "Bash(node -e \"require\\(''''next-intl/middleware''''\\)\")",
+      "Bash(curl:*)",
+      "Bash(netstat -ano)",
+      "Bash(powershell -Command \"Get-Process -Id 30800 | Select-Object Name,Path,CommandLine 2>/dev/null\" 2>&1)",
+      "Bash(tasklist:*)",
+      "Bash(ls /c/Users/daram/allseeds-turkey/app/[lang]/)",
+      "Bash(ls /c/Users/daram/allseeds-turkey/.env*)",
+      "Bash(ls:*)",
+      "mcp__Sanity__whoami",
+      "mcp__Sanity__get_schema",
+      "mcp__Sanity__list_workspace_schemas",
+      "mcp__Sanity__query_documents",
+      "mcp__Sanity__list_sanity_rules",
+      "mcp__Sanity__get_sanity_rules",
+      "mcp__Sanity___get_ui_context",
+      "mcp__Sanity__list_projects",
+      "Bash(npx sanity@latest dataset list)",
+      "Bash(npx sanity:*)",
+      "Bash(SANITY_API_TOKEN=\"skCuILoMNHeM0zZfvpl88X6iZSmQO5wkLCkVX8TY59x4uKoKENom3oU1cbnh4py04SjOZldV4c9qYQ6XSbRIqHxrS7SQGraw8lkF6hvCnaKhTbXBLrhxEffl9R4bxjPU5Tyur0wRhwkwUYY3l03fQmDRxGwDgQEJBQA4OFlV6jjzupGAU3SS\" node scripts/seed-content.mjs 2>&1)"
     ]
   }
 }

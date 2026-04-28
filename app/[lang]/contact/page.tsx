@@ -4,14 +4,8 @@ import Hero from '../../../components/Hero'
 import ContactForm from '../../../components/ContactForm'
 import { client } from '../../../sanity/lib/client'
 import { contactQuery } from '../../../lib/sanity/queries'
-import imageUrlBuilder from '@sanity/image-url'
-import type { SanityImageSource } from '@sanity/image-url'
+import { urlFor } from '../../../sanity/lib/image'
 import type { Metadata } from 'next'
-
-const builder = imageUrlBuilder(client)
-function urlFor(source: SanityImageSource) {
-  return builder.image(source)
-}
 
 interface Props {
   params: Promise<{ lang: string }>
