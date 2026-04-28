@@ -10,6 +10,7 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: { list: ['en', 'tr'] },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'pageTitle',
@@ -27,6 +28,13 @@ export default defineType({
       title: 'Hero Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+        }),
+      ],
     }),
     defineField({
       name: 'teamMembers',
@@ -36,13 +44,34 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            { name: 'name', title: 'Full Name', type: 'string' },
-            { name: 'title', title: 'Job Title', type: 'string' },
-            { name: 'bio', title: 'Bio', type: 'array', of: [{ type: 'block' }] },
-            { name: 'photo', title: 'Photo', type: 'image', options: { hotspot: true } },
-            { name: 'email', title: 'Email', type: 'string' },
-            { name: 'linkedin', title: 'LinkedIn URL', type: 'url' },
+            defineField({ name: 'name', title: 'Full Name', type: 'string' }),
+            defineField({ name: 'title', title: 'Job Title', type: 'string' }),
+            defineField({
+              name: 'bio',
+              title: 'Bio',
+              type: 'array',
+              of: [{ type: 'block' }],
+            }),
+            defineField({
+              name: 'photo',
+              title: 'Photo',
+              type: 'image',
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt text',
+                  type: 'string',
+                  description: 'Person\'s name for screen readers',
+                }),
+              ],
+            }),
+            defineField({ name: 'email', title: 'Email', type: 'string' }),
+            defineField({ name: 'linkedin', title: 'LinkedIn URL', type: 'url' }),
           ],
+          preview: {
+            select: { title: 'name', subtitle: 'title', media: 'photo' },
+          },
         },
       ],
     }),

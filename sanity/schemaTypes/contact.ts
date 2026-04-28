@@ -10,6 +10,7 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: { list: ['en', 'tr'] },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'pageTitle',
@@ -27,10 +28,17 @@ export default defineType({
       title: 'Hero Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+        }),
+      ],
     }),
     defineField({
       name: 'email',
-      title: 'Contact Email',
+      title: 'Primary Contact Email',
       type: 'string',
     }),
     defineField({
@@ -45,34 +53,40 @@ export default defineType({
     }),
     defineField({
       name: 'contactCategories',
-      title: 'Contact Categories',
+      title: 'Enquiry Categories',
       type: 'array',
       of: [
         {
           type: 'object',
           fields: [
-            { name: 'title', title: 'Title', type: 'string' },
-            { name: 'description', title: 'Description', type: 'string' },
-            { name: 'email', title: 'Email', type: 'string' },
-            { name: 'icon', title: 'Icon (emoji)', type: 'string' },
+            defineField({ name: 'title', title: 'Category Title', type: 'string' }),
+            defineField({ name: 'description', title: 'Short Description', type: 'string' }),
+            defineField({ name: 'email', title: 'Routing Email', type: 'string' }),
+            defineField({ name: 'icon', title: 'Icon (emoji)', type: 'string' }),
           ],
+          preview: {
+            select: { title: 'title', subtitle: 'email' },
+          },
         },
       ],
     }),
     defineField({
       name: 'locations',
-      title: 'Contact Locations',
+      title: 'Office Locations',
       type: 'array',
       of: [
         {
           type: 'object',
           fields: [
-            { name: 'city', title: 'City', type: 'string' },
-            { name: 'country', title: 'Country', type: 'string' },
-            { name: 'address', title: 'Address', type: 'text', rows: 3 },
-            { name: 'phone', title: 'Phone', type: 'string' },
-            { name: 'email', title: 'Email', type: 'string' },
+            defineField({ name: 'city', title: 'City', type: 'string' }),
+            defineField({ name: 'country', title: 'Country', type: 'string' }),
+            defineField({ name: 'address', title: 'Address', type: 'text', rows: 3 }),
+            defineField({ name: 'phone', title: 'Phone', type: 'string' }),
+            defineField({ name: 'email', title: 'Email', type: 'string' }),
           ],
+          preview: {
+            select: { title: 'city', subtitle: 'country' },
+          },
         },
       ],
     }),

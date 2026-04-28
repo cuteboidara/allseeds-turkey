@@ -10,6 +10,7 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: { list: ['en', 'tr'] },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'pageTitle',
@@ -27,6 +28,13 @@ export default defineType({
       title: 'Hero Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+        }),
+      ],
     }),
     defineField({
       name: 'items',
@@ -36,12 +44,32 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            { name: 'slug', title: 'Slug (ID)', type: 'string' },
-            { name: 'title', title: 'Title', type: 'string' },
-            { name: 'description', title: 'Description', type: 'array', of: [{ type: 'block' }] },
-            { name: 'image', title: 'Image', type: 'image', options: { hotspot: true } },
-            { name: 'icon', title: 'Icon Name', type: 'string' },
+            defineField({ name: 'slug', title: 'Slug / ID (e.g. procurement)', type: 'string' }),
+            defineField({ name: 'title', title: 'Title', type: 'string' }),
+            defineField({
+              name: 'description',
+              title: 'Description',
+              type: 'array',
+              of: [{ type: 'block' }],
+            }),
+            defineField({
+              name: 'image',
+              title: 'Section Image',
+              type: 'image',
+              options: { hotspot: true },
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt text',
+                  type: 'string',
+                }),
+              ],
+            }),
+            defineField({ name: 'icon', title: 'Icon (emoji)', type: 'string' }),
           ],
+          preview: {
+            select: { title: 'title', subtitle: 'slug', media: 'image' },
+          },
         },
       ],
     }),

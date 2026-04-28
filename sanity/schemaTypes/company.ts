@@ -10,6 +10,7 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: { list: ['en', 'tr'] },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'pageTitle',
@@ -27,10 +28,17 @@ export default defineType({
       title: 'Hero Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+        }),
+      ],
     }),
     defineField({
       name: 'aboutText',
-      title: 'About Text',
+      title: 'About / Our Story Text',
       type: 'array',
       of: [{ type: 'block' }],
     }),
@@ -47,9 +55,12 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            { name: 'value', title: 'Value', type: 'string' },
-            { name: 'label', title: 'Label', type: 'string' },
+            defineField({ name: 'value', title: 'Value (e.g. 725,000 MT)', type: 'string' }),
+            defineField({ name: 'label', title: 'Label', type: 'string' }),
           ],
+          preview: {
+            select: { title: 'value', subtitle: 'label' },
+          },
         },
       ],
     }),
@@ -61,19 +72,41 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            { name: 'city', title: 'City', type: 'string' },
-            { name: 'country', title: 'Country', type: 'string' },
-            { name: 'address', title: 'Address', type: 'text', rows: 3 },
-            { name: 'isPrimary', title: 'Primary Office', type: 'boolean' },
+            defineField({ name: 'city', title: 'City', type: 'string' }),
+            defineField({ name: 'country', title: 'Country', type: 'string' }),
+            defineField({ name: 'address', title: 'Address', type: 'text', rows: 3 }),
+            defineField({ name: 'isPrimary', title: 'Primary Office', type: 'boolean' }),
           ],
+          preview: {
+            select: { title: 'city', subtitle: 'country' },
+          },
         },
       ],
     }),
     defineField({
       name: 'galleryImages',
       title: 'Gallery Images',
+      description: 'Optional photo gallery shown on the company page',
       type: 'array',
-      of: [{ type: 'image', options: { hotspot: true } }],
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: 'alt',
+              title: 'Alt text',
+              type: 'string',
+              description: 'Describe the image for accessibility',
+            }),
+            defineField({
+              name: 'caption',
+              title: 'Caption (optional)',
+              type: 'string',
+            }),
+          ],
+        },
+      ],
     }),
   ],
 })

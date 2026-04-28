@@ -10,6 +10,7 @@ export default defineType({
       title: 'Language',
       type: 'string',
       options: { list: ['en', 'tr'] },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'heroTitle',
@@ -27,6 +28,14 @@ export default defineType({
       title: 'Hero Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+          description: 'Describe the image for accessibility and SEO',
+        }),
+      ],
     }),
     defineField({
       name: 'aboutTitle',
@@ -44,6 +53,13 @@ export default defineType({
       title: 'About Section Image',
       type: 'image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+        }),
+      ],
     }),
     defineField({
       name: 'statsItems',
@@ -53,9 +69,12 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            { name: 'value', title: 'Value', type: 'string' },
-            { name: 'label', title: 'Label', type: 'string' },
+            defineField({ name: 'value', title: 'Value (e.g. >2,000)', type: 'string' }),
+            defineField({ name: 'label', title: 'Label', type: 'string' }),
           ],
+          preview: {
+            select: { title: 'value', subtitle: 'label' },
+          },
         },
       ],
     }),
