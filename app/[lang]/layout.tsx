@@ -40,7 +40,7 @@ export default async function LangLayout({ children, params }: Props) {
   return (
     <NextIntlClientProvider messages={messages}>
       <Header />
-      <main className="flex-1 pt-16">{children}</main>
+      <main className="flex-1 pt-[68px]">{children}</main>
       <Footer />
     </NextIntlClientProvider>
   )
