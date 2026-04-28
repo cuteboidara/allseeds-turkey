@@ -1,13 +1,15 @@
 import { getTranslations } from 'next-intl/server'
 import { setRequestLocale } from 'next-intl/server'
 import Image from 'next/image'
-import Hero from '../../../components/Hero'
 import PortableText from '../../../components/PortableText'
 import { client } from '../../../sanity/lib/client'
 import { companyQuery } from '../../../lib/sanity/queries'
 import type { SanityImageSource } from '@sanity/image-url'
 import { urlFor } from '../../../sanity/lib/image'
 import type { Metadata } from 'next'
+
+const NAVY = '#1a2a4a'
+const CREAM = '#f5f1e8'
 
 interface Props {
   params: Promise<{ lang: string }>
@@ -19,6 +21,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t('pageTitle') }
 }
 
+const fallbackStats = [
+  { value: '>2,000', label: 'Oilseed Suppliers', labelTr: 'Yağlı Tohum Tedarikçisi' },
+  { value: '725,000 MT', label: 'Annual Crush Capacity', labelTr: 'Yıllık Kırma Kapasitesi' },
+  { value: '#3', label: 'Vegetable Oil Exporter from Ukraine', labelTr: "Ukrayna'dan Bitkisel Yağ İhracatçısı" },
+  { value: '3', label: 'Crushing Plants', labelTr: 'Kırma Tesisi' },
+]
+
+const fallbackOffices = [
+  { city: 'Geneva', country: 'Switzerland', flag: '🇨🇭', role: 'Trading Hub' },
+  { city: 'Luxembourg', country: 'Luxembourg', flag: '🇱🇺', role: 'Finance' },
+  { city: 'Kyiv', country: 'Ukraine', flag: '🇺🇦', role: 'Operations' },
+  { city: 'Mumbai', country: 'India', flag: '🇮🇳', role: 'Asia Pacific' },
+  { city: 'Istanbul', country: 'Turkey', flag: '🇹🇷', role: 'Turkish Branch' },
+]
+
 export default async function CompanyPage({ params }: Props) {
   const { lang } = await params
   setRequestLocale(lang)
@@ -26,35 +43,70 @@ export default async function CompanyPage({ params }: Props) {
   const t = await getTranslations({ locale: lang })
   const data = await client.fetch(companyQuery, { lang }).catch(() => null)
 
+  const keyFigures: Array<{ value: string; label: string }> = data?.keyFigures ?? []
+  const locations: Array<{ city: string; country: string; address: string; isPrimary: boolean }> =
+    data?.locations ?? []
+
   return (
     <>
-      <Hero
-        title={data?.pageTitle || t('company.pageTitle')}
-        subtitle={data?.pageSubtitle || t('company.pageSubtitle')}
-        imageUrl={data?.heroImage ? urlFor(data.heroImage).width(1920).height(800).url() : undefined}
-        size="medium"
-      />
+      {/* ── HERO ── */}
+      <section
+        className="relative flex items-end justify-start pt-32 pb-20 px-6 sm:px-10 lg:px-20 min-h-[60vh]"
+        style={{ backgroundColor: NAVY }}
+      >
+        {data?.heroImage && (
+          <Image
+            src={urlFor(data.heroImage).width(1920).height(800).url()}
+            alt="Company"
+            fill
+            className="object-cover opacity-30"
+            priority
+          />
+        )}
+        <div className="relative z-10 text-white max-w-3xl">
+          <p className="text-green-400 text-xs font-bold uppercase tracking-widest mb-3">
+            {t('nav.company')}
+          </p>
+          <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-4">
+            {data?.pageTitle || t('company.pageTitle')}
+          </h1>
+          <p className="text-white/60 text-lg">
+            {data?.pageSubtitle || t('company.pageSubtitle')}
+          </p>
+        </div>
+      </section>
 
-      {/* Our Story */}
-      <section className="py-20 bg-white">
+      {/* ── OUR STORY (cream) ── */}
+      <section style={{ backgroundColor: CREAM }} className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">{t('company.ourStory')}</h2>
+              <p className="text-green-600 text-xs font-bold uppercase tracking-widest mb-3">
+                {t('company.ourStory')}
+              </p>
+              <h2 className="text-3xl font-bold mb-6" style={{ color: NAVY }}>
+                {t('home.aboutText')}
+              </h2>
               {data?.aboutText ? (
-                <PortableText value={data.aboutText} />
+                <PortableText value={data.aboutText} className="text-gray-600 leading-relaxed" />
               ) : (
-                <p className="text-gray-600 leading-relaxed text-lg">
-                  Allseeds Turkey is a leading agricultural commodity trading company with a strong presence in global markets.
+                <p className="text-gray-600 leading-relaxed">
+                  {lang === 'tr'
+                    ? 'Allseeds Group, Ukrayna\'nın en büyük bitkisel yağ ihracatçılarından biridir. Ayçiçeği, kolza ve soya fasulyesi tedarikinden endüstriyel ölçekte kırma işlemine, depolama ve terminal operasyonlarından küresel ticarete kadar tüm değer zincirini yönetmekteyiz.'
+                    : 'Allseeds Group is one of Ukraine\'s largest vegetable oil exporters. We manage the entire value chain from oilseed procurement through industrial-scale crushing, storage and terminal operations, to global trade.'}
                 </p>
               )}
               {data?.founded && (
-                <p className="mt-4 text-sm text-gray-500">
-                  Founded: <span className="font-semibold text-gray-700">{data.founded}</span>
+                <p className="mt-6 text-sm text-gray-500">
+                  {lang === 'tr' ? 'Kuruluş' : 'Founded'}:{' '}
+                  <span className="font-semibold" style={{ color: NAVY }}>{data.founded}</span>
                 </p>
               )}
             </div>
-            <div className="relative h-80 lg:h-96 rounded-2xl overflow-hidden bg-green-100">
+            <div
+              className="relative h-80 lg:h-[420px] rounded-2xl overflow-hidden"
+              style={{ backgroundColor: '#d0cab8' }}
+            >
               {data?.heroImage ? (
                 <Image
                   src={urlFor(data.heroImage).width(800).height(600).url()}
@@ -64,7 +116,7 @@ export default async function CompanyPage({ params }: Props) {
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-6xl">🏢</span>
+                  <span className="text-7xl">🏢</span>
                 </div>
               )}
             </div>
@@ -72,71 +124,126 @@ export default async function CompanyPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Key figures */}
-      {data?.keyFigures && data.keyFigures.length > 0 && (
-        <section className="py-16 bg-green-800 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-center mb-10 text-green-100">
-              {t('company.keyFigures')}
-            </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              {data.keyFigures.map((fig: { value: string; label: string }, i: number) => (
-                <div key={i}>
-                  <div className="text-4xl font-bold text-green-300">{fig.value}</div>
-                  <div className="text-sm text-green-100 mt-1">{fig.label}</div>
-                </div>
-              ))}
-            </div>
+      {/* ── KEY FIGURES (navy) ── */}
+      <section style={{ backgroundColor: NAVY }} className="py-20 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-2">{t('company.keyFigures')}</h2>
+            <p className="text-white/50 text-sm uppercase tracking-widest">
+              {t('home.keyFiguresSubtitle')}
+            </p>
           </div>
-        </section>
-      )}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {(keyFigures.length > 0 ? keyFigures : fallbackStats).map((stat, i) => (
+              <div
+                key={i}
+                className="rounded-2xl p-8 flex flex-col items-center text-center"
+                style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <div className="w-14 h-14 rounded-full bg-green-400 flex items-center justify-center mb-5">
+                  <span className="text-2xl">{['🌾', '⚙️', '🏆', '🏭'][i] ?? '📊'}</span>
+                </div>
+                <div className="text-3xl font-bold text-green-400 mb-2">{stat.value}</div>
+                <div className="text-sm text-white/60 leading-snug">
+                  {lang === 'tr' && 'labelTr' in stat
+                    ? (stat as typeof fallbackStats[0]).labelTr
+                    : stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Locations */}
-      {data?.locations && data.locations.length > 0 && (
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+      {/* ── GLOBAL OFFICES (cream) ── */}
+      <section style={{ backgroundColor: CREAM }} className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-12">
+            <p className="text-green-600 text-xs font-bold uppercase tracking-widest mb-3">
               {t('company.locations')}
+            </p>
+            <h2 className="text-3xl font-bold" style={{ color: NAVY }}>
+              {lang === 'tr' ? 'Küresel Ofislerimiz' : 'Our Global Presence'}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.locations.map((loc: { city: string; country: string; address: string; isPrimary: boolean }, i: number) => (
-                <div key={i} className={`rounded-2xl p-8 border ${loc.isPrimary ? 'bg-green-700 text-white border-green-600' : 'bg-white border-gray-200'}`}>
-                  {loc.isPrimary && (
-                    <span className="inline-block text-xs font-semibold bg-green-500 text-white px-2 py-0.5 rounded mb-3">
-                      HQ
-                    </span>
-                  )}
-                  <h3 className={`text-lg font-bold mb-1 ${loc.isPrimary ? 'text-white' : 'text-gray-900'}`}>
-                    {loc.city}
-                  </h3>
-                  <p className={`text-sm ${loc.isPrimary ? 'text-green-100' : 'text-gray-500'}`}>{loc.country}</p>
-                  <p className={`text-sm mt-2 ${loc.isPrimary ? 'text-green-100' : 'text-gray-600'}`}>{loc.address}</p>
-                </div>
-              ))}
-            </div>
           </div>
-        </section>
-      )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+            {(locations.length > 0
+              ? locations.map((loc) => ({
+                  city: loc.city,
+                  country: loc.country,
+                  flag: '🌍',
+                  role: loc.isPrimary ? 'Headquarters' : loc.address,
+                }))
+              : fallbackOffices
+            ).map((office) => (
+              <div
+                key={office.city}
+                className="rounded-2xl p-6 flex flex-col gap-2"
+                style={
+                  office.city === 'Istanbul'
+                    ? { backgroundColor: NAVY, color: 'white' }
+                    : { backgroundColor: '#e8e2d5' }
+                }
+              >
+                <span className="text-3xl">{office.flag}</span>
+                <h3
+                  className="font-bold text-base"
+                  style={{ color: office.city === 'Istanbul' ? 'white' : NAVY }}
+                >
+                  {office.city}
+                </h3>
+                <p
+                  className="text-sm"
+                  style={{ color: office.city === 'Istanbul' ? 'rgba(255,255,255,0.7)' : '#6b7280' }}
+                >
+                  {office.country}
+                </p>
+                <span
+                  className="text-xs font-semibold mt-1"
+                  style={{ color: office.city === 'Istanbul' ? '#4ade80' : '#16a34a' }}
+                >
+                  {office.role}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Gallery */}
-      {data?.galleryImages && data.galleryImages.length > 0 && (
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {data.galleryImages.map((img: SanityImageSource, i: number) => (
-                <div key={i} className="relative h-48 md:h-64 rounded-xl overflow-hidden">
-                  <Image
-                    src={urlFor(img).width(600).height(400).url()}
-                    alt={`Gallery ${i + 1}`}
-                    fill
-                    className="object-cover hover:scale-105 transition-transform duration-300"
-                  />
+      {/* ── ACTIVITIES OVERVIEW (white) ── */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { num: '01', label: lang === 'tr' ? 'Tedarik' : 'Procurement', icon: '🌾' },
+                { num: '02', label: lang === 'tr' ? 'İşleme' : 'Processing', icon: '⚙️' },
+                { num: '03', label: lang === 'tr' ? 'Depolama' : 'Storage', icon: '🏭' },
+                { num: '04', label: lang === 'tr' ? 'Ticaret' : 'Trading', icon: '🌍' },
+              ].map(({ num, label, icon }) => (
+                <div
+                  key={num}
+                  className="rounded-xl p-5 flex flex-col gap-2"
+                  style={{ backgroundColor: CREAM }}
+                >
+                  <span className="text-xs font-bold text-green-600">{num}</span>
+                  <span className="text-2xl">{icon}</span>
+                  <span className="text-sm font-semibold" style={{ color: NAVY }}>{label}</span>
                 </div>
               ))}
             </div>
+            <div>
+              <p className="text-green-600 text-xs font-bold uppercase tracking-widest mb-3">
+                {lang === 'tr' ? 'Dikey Entegrasyon' : 'Vertical Integration'}
+              </p>
+              <h2 className="text-3xl font-bold mb-5" style={{ color: NAVY }}>
+                {t('home.activitiesTitle')}
+              </h2>
+              <p className="text-gray-600 leading-relaxed">{t('home.activitiesIntro')}</p>
+            </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
     </>
   )
 }

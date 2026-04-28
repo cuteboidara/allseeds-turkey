@@ -44,6 +44,22 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'contactCategories',
+      title: 'Contact Categories',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'title', title: 'Title', type: 'string' },
+            { name: 'description', title: 'Description', type: 'string' },
+            { name: 'email', title: 'Email', type: 'string' },
+            { name: 'icon', title: 'Icon (emoji)', type: 'string' },
+          ],
+        },
+      ],
+    }),
+    defineField({
       name: 'locations',
       title: 'Contact Locations',
       type: 'array',

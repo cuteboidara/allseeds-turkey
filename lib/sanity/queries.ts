@@ -81,6 +81,7 @@ export const contactQuery = groq`
     email,
     phone,
     formTitle,
+    contactCategories,
     locations
   }
 `

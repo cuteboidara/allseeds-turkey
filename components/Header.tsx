@@ -11,7 +11,6 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const navLinks = [
-    { href: '/', label: t('home') },
     { href: '/activities', label: t('activities') },
     { href: '/sustainability', label: t('sustainability') },
     { href: '/people', label: t('people') },
@@ -22,23 +21,23 @@ export default function Header() {
   const otherLocale = locale === 'en' ? 'tr' : 'en'
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-green-800 tracking-tight">
-              Allseeds<span className="text-green-500">Turkey</span>
+          <Link href="/" className="flex items-center gap-1.5 shrink-0">
+            <span className="text-lg font-bold tracking-tight" style={{ color: '#1a2a4a' }}>
+              Allseeds<span className="text-green-400">Turkey</span>
             </span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-7">
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href as '/'}
-                className="text-sm font-medium text-gray-700 hover:text-green-700 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-green-500 transition-colors"
               >
                 {label}
               </Link>
@@ -50,14 +49,14 @@ export default function Header() {
             <Link
               href={pathname}
               locale={otherLocale}
-              className="text-xs font-semibold px-2.5 py-1 rounded border border-gray-300 text-gray-600 hover:border-green-600 hover:text-green-700 transition-colors uppercase"
+              className="text-xs font-bold px-3 py-1.5 rounded border border-gray-200 text-gray-500 hover:border-green-400 hover:text-green-500 transition-colors uppercase tracking-wide"
             >
               {otherLocale}
             </Link>
 
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-2 text-gray-700 hover:text-green-700"
+              className="md:hidden p-2 text-gray-600 hover:text-green-500"
               aria-label="Toggle menu"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,7 +80,7 @@ export default function Header() {
                 key={href}
                 href={href as '/'}
                 onClick={() => setMenuOpen(false)}
-                className="py-2 text-sm font-medium text-gray-700 hover:text-green-700 transition-colors"
+                className="py-2.5 text-sm font-medium text-gray-700 hover:text-green-500 transition-colors border-b border-gray-50 last:border-0"
               >
                 {label}
               </Link>
