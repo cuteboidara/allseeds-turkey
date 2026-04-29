@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useLocale } from 'next-intl'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 import { Link, usePathname } from '../lib/navigation'
 
 const NAVY = '#1a2a4a'
@@ -28,11 +29,15 @@ export default function Header() {
         <div className="flex items-center justify-between h-[68px]">
 
           {/* ── Logo ── */}
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <span className="text-2xl leading-none">🌻</span>
-            <span className="text-[17px] font-bold tracking-tight" style={{ color: NAVY }}>
-              Allseeds<span className="text-green-500">Turkey</span>
-            </span>
+          <Link href="/" className="shrink-0 transition-opacity hover:opacity-80">
+            <Image
+              src="/allseeds-logo.svg"
+              alt="Allseeds Turkey"
+              width={150}
+              height={50}
+              priority
+              className="w-[100px] sm:w-[150px] h-auto"
+            />
           </Link>
 
           {/* ── Desktop nav ── */}
