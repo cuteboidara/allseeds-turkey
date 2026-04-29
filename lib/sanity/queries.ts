@@ -8,7 +8,11 @@ export const homepageQuery = groq`
     aboutTitle,
     aboutText,
     aboutImage,
-    statsItems
+    aboutCards[] { title, image },
+    statsItems[] { value, label, icon },
+    activityCards[] { num, title, image },
+    sustainabilityCards[] { title, description, image },
+    homeTeamMembers[] { name, role, photo }
   }
 `
 

@@ -5,7 +5,14 @@ import { Link } from '../../lib/navigation'
 import { client } from '../../sanity/lib/client'
 import { homepageQuery } from '../../lib/sanity/queries'
 import { urlFor } from '../../sanity/lib/image'
-import { HERO_IMAGES, ABOUT_GRID_IMAGES, HOME_TEAM_IMAGES } from '../../lib/heroImages'
+import type { SanityImageSource } from '@sanity/image-url'
+import {
+  HERO_IMAGES,
+  ABOUT_GRID_IMAGES,
+  ACTIVITY_IMAGES_LIST,
+  SUSTAINABILITY_IMAGES_LIST,
+  HOME_TEAM_IMAGES,
+} from '../../lib/heroImages'
 
 interface Props {
   params: Promise<{ lang: string }>
@@ -14,6 +21,34 @@ interface Props {
 const NAVY = '#1a2a4a'
 const CREAM = '#f5f1e8'
 
+/** Gray box shown when a Sanity image slot hasn't been filled yet */
+function ImgPlaceholder({ label, className = '' }: { label?: string; className?: string }) {
+  return (
+    <div
+      className={`absolute inset-0 flex flex-col items-center justify-center gap-2 ${className}`}
+      style={{ backgroundColor: '#ddd8cf' }}
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}
+        className="w-8 h-8 text-gray-400">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <circle cx="12" cy="12" r="3" />
+        <path d="M9 5l1.5-2h3L15 5" />
+      </svg>
+      {label && <span className="text-[10px] font-semibold text-gray-400 text-center px-2">{label}</span>}
+    </div>
+  )
+}
+
+/** Resolves a Sanity image to URL, or falls back to a Picsum seed URL */
+function resolveImg(
+  sanityImg: SanityImageSource | null | undefined,
+  fallback: string,
+  w: number,
+  h: number,
+) {
+  return sanityImg ? urlFor(sanityImg).width(w).height(h).url() : fallback
+}
+
 export default async function HomePage({ params }: Props) {
   const { lang } = await params
   setRequestLocale(lang)
@@ -21,29 +56,46 @@ export default async function HomePage({ params }: Props) {
   const t = await getTranslations({ locale: lang })
   const data = await client.fetch(homepageQuery, { lang }).catch(() => null)
 
-  const stats = data?.statsItems ?? [
-    { value: '>2,000', label: lang === 'tr' ? 'Yağlı Tohum Tedarikçisi' : 'Oilseed Suppliers' },
-    { value: '725,000 MT', label: lang === 'tr' ? 'Yıllık Kırma Kapasitesi' : 'Annual Crush Capacity' },
-    { value: '#3', label: lang === 'tr' ? "Ukrayna'dan Bitkisel Yağ İhracatçısı" : 'Vegetable Oil Exporter from Ukraine' },
+  // ── About cards ──────────────────────────────────────────────────────────────
+  const aboutCardLabels = [
+    lang === 'tr' ? 'Tedarik' : 'Procurement',
+    lang === 'tr' ? 'İşleme' : 'Processing',
+    lang === 'tr' ? 'Depolama' : 'Storage',
+    lang === 'tr' ? 'Sevkiyat' : 'Shipping',
   ]
+  const aboutCards: Array<{ title?: string; image?: SanityImageSource }> =
+    data?.aboutCards ?? []
 
-  const sustainabilityPillars = [
-    {
-      icon: '🌿',
-      title: lang === 'tr' ? 'Çevre Sorumluluğu' : 'Environmental Stewardship',
-      desc: t('sustainability.environmentalDesc'),
-    },
-    {
-      icon: '✅',
-      title: lang === 'tr' ? 'Ürün Kalitesi ve Güvenliği' : 'Product Quality & Safety',
-      desc: t('sustainability.qualityDesc'),
-    },
-    {
-      icon: '🤝',
-      title: lang === 'tr' ? 'Sosyal Sürdürülebilirlik' : 'Social Sustainability',
-      desc: t('sustainability.socialDesc'),
-    },
+  // ── Stats / Key figures ───────────────────────────────────────────────────
+  const statsItems: Array<{ value: string; label: string; icon?: SanityImageSource }> =
+    data?.statsItems ?? [
+      { value: '>2,000', label: lang === 'tr' ? 'Yağlı Tohum Tedarikçisi' : 'Oilseed Suppliers' },
+      { value: '725,000 MT', label: lang === 'tr' ? 'Yıllık Kırma Kapasitesi' : 'Annual Crush Capacity' },
+      { value: '#3', label: lang === 'tr' ? "Ukrayna'dan Bitkisel Yağ İhracatçısı" : 'Vegetable Oil Exporter from Ukraine' },
+    ]
+
+  // ── Activity teaser cards ─────────────────────────────────────────────────
+  const activityDefaults = [
+    { num: '01', title: lang === 'tr' ? 'Tedarik' : 'Procurement' },
+    { num: '02', title: lang === 'tr' ? 'İşleme' : 'Processing' },
+    { num: '03', title: lang === 'tr' ? 'Depolama' : 'Storage' },
+    { num: '04', title: lang === 'tr' ? 'Ticaret' : 'Trading' },
   ]
+  const activityCards: Array<{ num?: string; title?: string; image?: SanityImageSource }> =
+    data?.activityCards ?? []
+
+  // ── Sustainability cards ───────────────────────────────────────────────────
+  const sustainabilityDefaults = [
+    { title: lang === 'tr' ? 'Çevre Sorumluluğu' : 'Environmental Stewardship', description: t('sustainability.environmentalDesc') },
+    { title: lang === 'tr' ? 'Ürün Kalitesi ve Güvenliği' : 'Product Quality & Safety', description: t('sustainability.qualityDesc') },
+    { title: lang === 'tr' ? 'Sosyal Sürdürülebilirlik' : 'Social Sustainability', description: t('sustainability.socialDesc') },
+  ]
+  const sustainabilityCards: Array<{ title?: string; description?: string; image?: SanityImageSource }> =
+    data?.sustainabilityCards ?? []
+
+  // ── Team members ──────────────────────────────────────────────────────────
+  const homeTeamMembers: Array<{ name?: string; role?: string; photo?: SanityImageSource }> =
+    data?.homeTeamMembers ?? []
 
   return (
     <>
@@ -53,17 +105,12 @@ export default async function HomePage({ params }: Props) {
         style={{ backgroundColor: NAVY }}
       >
         <Image
-          src={
-            data?.heroImage
-              ? urlFor(data.heroImage).width(1920).height(1080).url()
-              : HERO_IMAGES.home
-          }
+          src={resolveImg(data?.heroImage, HERO_IMAGES.home, 1920, 1080)}
           alt={data?.heroTitle || 'Allseeds Turkey'}
           fill
           className="object-cover"
           priority
         />
-        {/* dark gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -95,11 +142,9 @@ export default async function HomePage({ params }: Props) {
                 {t('home.aboutTitle')}
               </p>
               <h2 className="text-3xl lg:text-4xl font-bold leading-snug mb-6" style={{ color: NAVY }}>
-                {data?.aboutTitle ? data.aboutTitle : t('home.aboutText')}
+                {data?.aboutTitle || t('home.aboutText')}
               </h2>
-              <p className="text-gray-600 leading-relaxed mb-8">
-                {t('home.aboutText')}
-              </p>
+              <p className="text-gray-600 leading-relaxed mb-8">{t('home.aboutText')}</p>
               <Link
                 href="/company"
                 className="inline-flex items-center gap-2 bg-green-400 text-[#1a2a4a] font-bold px-6 py-3 rounded hover:bg-green-300 transition-colors text-sm"
@@ -108,27 +153,37 @@ export default async function HomePage({ params }: Props) {
               </Link>
             </div>
 
-            {/* Image grid 2×2 */}
+            {/* About 2×2 image grid */}
             <div className="grid grid-cols-2 gap-3">
-              {[
-                lang === 'tr' ? 'Tedarik' : 'Procurement',
-                lang === 'tr' ? 'İşleme' : 'Processing',
-                lang === 'tr' ? 'Depolama' : 'Storage',
-                lang === 'tr' ? 'Sevkiyat' : 'Shipping',
-              ].map((label, i) => (
-                <div key={label} className="relative h-44 rounded-xl overflow-hidden">
-                  <Image
-                    src={
-                      data?.aboutImage
-                        ? urlFor(data.aboutImage).width(400).height(300).url()
-                        : ABOUT_GRID_IMAGES[i]
-                    }
-                    alt={label}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+              {aboutCardLabels.map((label, i) => {
+                const card = aboutCards[i]
+                const sanityImg = card?.image ?? data?.aboutImage
+                return (
+                  <div key={i} className="relative h-44 rounded-xl overflow-hidden">
+                    {sanityImg ? (
+                      <Image
+                        src={urlFor(sanityImg).width(400).height(300).url()}
+                        alt={card?.title || label}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <>
+                        <Image
+                          src={ABOUT_GRID_IMAGES[i]}
+                          alt={label}
+                          fill
+                          className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/10" />
+                      </>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/50 to-transparent">
+                      <span className="text-xs font-semibold text-white">{label}</span>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -142,14 +197,28 @@ export default async function HomePage({ params }: Props) {
             <p className="text-white/50 text-sm uppercase tracking-widest">{t('home.keyFiguresSubtitle')}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {stats.map((stat: { value: string; label: string }, i: number) => (
+            {statsItems.map((stat, i) => (
               <div
                 key={i}
                 className="rounded-2xl p-8 flex flex-col items-center text-center"
                 style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
-                <div className="w-14 h-14 rounded-full bg-green-400 flex items-center justify-center mb-5">
-                  <span className="text-2xl">{['🌾', '⚙️', '🏆'][i] ?? '📊'}</span>
+                {/* Icon circle — Sanity image > clean placeholder */}
+                <div className="relative w-14 h-14 rounded-full bg-green-400 overflow-hidden flex items-center justify-center mb-5 flex-shrink-0">
+                  {stat.icon ? (
+                    <Image
+                      src={urlFor(stat.icon).width(56).height(56).url()}
+                      alt={stat.label}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}
+                      className="w-6 h-6 text-[#1a2a4a]">
+                      <path d="M3 12l9-9 9 9" />
+                      <path d="M9 21V12h6v9" />
+                    </svg>
+                  )}
                 </div>
                 <div className="text-4xl font-bold text-green-400 mb-2">{stat.value}</div>
                 <div className="text-sm text-white/60 leading-snug">{stat.label}</div>
@@ -165,9 +234,7 @@ export default async function HomePage({ params }: Props) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <span
-                  className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-400 text-[#1a2a4a] font-bold text-sm"
-                >
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-green-400 text-[#1a2a4a] font-bold text-sm">
                   01
                 </span>
                 <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
@@ -185,23 +252,42 @@ export default async function HomePage({ params }: Props) {
                 {t('home.viewAll')} →
               </Link>
             </div>
+
+            {/* Activity 2×2 image cards */}
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { num: '01', title: lang === 'tr' ? 'Tedarik' : 'Procurement', icon: '🌾' },
-                { num: '02', title: lang === 'tr' ? 'İşleme' : 'Processing', icon: '⚙️' },
-                { num: '03', title: lang === 'tr' ? 'Depolama' : 'Storage', icon: '🏭' },
-                { num: '04', title: lang === 'tr' ? 'Ticaret' : 'Trading', icon: '🌍' },
-              ].map(({ num, title, icon }) => (
-                <div
-                  key={num}
-                  className="rounded-xl p-5 flex flex-col gap-2"
-                  style={{ backgroundColor: '#e8e2d5' }}
-                >
-                  <span className="text-xs font-bold text-green-600">{num}</span>
-                  <span className="text-2xl">{icon}</span>
-                  <span className="text-sm font-semibold" style={{ color: NAVY }}>{title}</span>
-                </div>
-              ))}
+              {activityDefaults.map(({ num, title }, i) => {
+                const card = activityCards[i]
+                const sanityImg = card?.image
+                const cardTitle = card?.title || title
+                return (
+                  <div
+                    key={num}
+                    className="relative rounded-xl overflow-hidden h-40"
+                    style={{ backgroundColor: '#d0cab8' }}
+                  >
+                    {sanityImg ? (
+                      <Image
+                        src={urlFor(sanityImg).width(400).height(300).url()}
+                        alt={cardTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src={ACTIVITY_IMAGES_LIST[i]}
+                        alt={cardTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 p-3">
+                      <span className="text-[10px] font-bold text-green-400 block mb-0.5">{card?.num || num}</span>
+                      <span className="text-sm font-semibold text-white">{cardTitle}</span>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -232,19 +318,47 @@ export default async function HomePage({ params }: Props) {
               </Link>
             </div>
           </div>
-          {/* 3 Pillar cards */}
+
+          {/* 3 Pillar cards with image tops */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {sustainabilityPillars.map(({ icon, title, desc }) => (
-              <div
-                key={title}
-                className="rounded-2xl p-7"
-                style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
-              >
-                <span className="text-3xl mb-4 block">{icon}</span>
-                <h3 className="text-base font-bold mb-2 text-green-400">{title}</h3>
-                <p className="text-sm text-white/60 leading-relaxed">{desc}</p>
-              </div>
-            ))}
+            {sustainabilityDefaults.map(({ title, description }, i) => {
+              const card = sustainabilityCards[i]
+              const sanityImg = card?.image
+              const cardTitle = card?.title || title
+              const cardDesc = card?.description || description
+              return (
+                <div
+                  key={i}
+                  className="rounded-2xl overflow-hidden"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+                >
+                  {/* Image area */}
+                  <div className="relative h-36">
+                    {sanityImg ? (
+                      <Image
+                        src={urlFor(sanityImg).width(600).height(300).url()}
+                        alt={cardTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src={SUSTAINABILITY_IMAGES_LIST[i]}
+                        alt={cardTitle}
+                        fill
+                        className="object-cover opacity-60"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/40" />
+                  </div>
+                  {/* Text area */}
+                  <div className="p-6">
+                    <h3 className="text-base font-bold mb-2 text-green-400">{cardTitle}</h3>
+                    <p className="text-sm text-white/60 leading-relaxed">{cardDesc}</p>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -268,13 +382,38 @@ export default async function HomePage({ params }: Props) {
                 {t('home.meetTeam')} →
               </Link>
             </div>
-            {/* Team portrait grid */}
+
+            {/* Team portrait 3×2 grid */}
             <div className="grid grid-cols-3 gap-3">
-              {HOME_TEAM_IMAGES.map((src, i) => (
-                <div key={i} className="relative rounded-xl aspect-square overflow-hidden">
-                  <Image src={src} alt={`Team member ${i + 1}`} fill className="object-cover" />
-                </div>
-              ))}
+              {Array.from({ length: 6 }).map((_, i) => {
+                const member = homeTeamMembers[i]
+                const sanityPhoto = member?.photo
+                return (
+                  <div key={i} className="relative rounded-xl aspect-square overflow-hidden">
+                    {sanityPhoto ? (
+                      <Image
+                        src={urlFor(sanityPhoto).width(300).height(300).url()}
+                        alt={member?.name || `Team member ${i + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src={HOME_TEAM_IMAGES[i]}
+                        alt={`Team member ${i + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
+                    {member?.name && (
+                      <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 bg-gradient-to-t from-black/60 to-transparent">
+                        <span className="text-[10px] font-semibold text-white block truncate">{member.name}</span>
+                        {member.role && <span className="text-[9px] text-white/70 block truncate">{member.role}</span>}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
